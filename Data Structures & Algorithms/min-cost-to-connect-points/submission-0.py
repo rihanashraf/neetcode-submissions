@@ -1,0 +1,29 @@
+class Solution:
+    def minCostConnectPoints(self, points: List[List[int]]) -> int:
+        adj =defaultdict(list)
+
+        for i in range(len(points)):
+            x1, y1 = points[i]
+            for j in range(i+1, len(points)):
+                x2, y2 = points[j]
+                cost = abs(x1-x2) + abs(y1-y2) 
+
+                adj[i].append([cost, j])
+                adj[j].append([cost, i])
+
+        minH = [[0,0]]
+        visit = set()
+        res = 0
+
+        while len(visit)<len(points):
+            cost, i = heapq.heappop(minH)
+            if i in visit:
+                continue
+            res+=cost
+            visit.add(i)
+            for neiCost, nei in adj[i]:
+                if nei not in visit:
+                    heapq.heappush(minH, [neiCost, nei])
+        return res
+
+                               
